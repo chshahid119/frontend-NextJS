@@ -1,8 +1,10 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { getEmailFromLocalStorage } from "./utils/utils";
+import { useRouter } from "next/navigation";
 
 export function AddProductForm() {
   const [productName, setProductName] = useState<string>("");
@@ -11,6 +13,15 @@ export function AddProductForm() {
   const [productPictures, setProductPictures] = useState<File[]>([]);
   const [previewPicturesUrls, setPreviewPicturesUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const Userid = getEmailFromLocalStorage();
+    if (!Userid) {
+      router.push("/", { scroll: false });
+    }
+  }, []);
 
   const handleFileInputChange = (
     event: ChangeEvent<HTMLInputElement>
